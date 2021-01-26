@@ -58,5 +58,7 @@ select * from product offset 1; # smeshenie na 1
 delete from cart where id= # delete stroke in table
 DROP DATABASE app; # del base  
 \conninfo
-\q # exit
+\q # exit 
+pg_dump name base > /home/user/db.sql # backup
+psql -U postgres dbname < infile # recovery
 
