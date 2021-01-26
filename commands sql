@@ -1,9 +1,62 @@
 sudo apt-get update
-sudo apt install postgresql   # Установка постгре
-sudo -i -u postgres psql # Переход в командную строку postgesql
+sudo apt install postgresql   # install postgres
+sudo -i -u postgres psql # command stroke postgesql
 CREATE USER test_user WITH password 'qwerty'; # CREATE USER
-CREATE DATABASE test_database OWNER test_user; # CREATE BASE
-GRANT ALL privileges ON DATABASE test_db TO test_user; # privileges test_user in base test_db
-DROP DATABASE test_db; # del base  
+CREATE DATABASE app; # CREATE BASE
+GRANT ALL PRIVILEGES ON DATABASE app to test_user; # privileges test_user in app
+\c app #connect base 
+\d # list table
+
+CREATE TABLE имя таблицы (
+имя_колонки1 тип_колонки ( длина ) ограничения ,
+имя_колонки2 тип_колонки ( длина ),
+имя_колонки3 тип_колонки ( длина )
+); # create table
+
+create table customer (
+id serial primary key,
+name varchar (255),
+phone varchar (30),
+email varchar(30)
+);
+\d product# see table
+
+create table product (
+id serial primary key,
+name varchar (255),
+opisanie text,
+price integer
+);
+
+create table product_photo (
+id serial primary key,
+url varchar (255),
+product_id integer references product(id)
+);
+
+create table cart (
+customer_id integer references customer(id),
+id serial primary key
+);
+
+create table cart_product (
+product_id integer references product(id),
+cart_id integer references cart(id)
+);
+
+select * from product # see table all
+select name from product # see table name
+insert into customer (name, phone, email) values ('vasilii', '03', 'vasilii@mail.ru'); # add in to table customer
+insert into product (name, opisanie, price) values ('iphone', 'Krutoi telephone', '100000');
+insert into cart(id) values (1);
+insert into cart_product(product_id, cart_id) values (1, 1), (1, 2);
+select c.name, cart.id as cart_id, cp.product_id, p.price from customer c left join cart  on cart.customer_id=c.id left join cart_product cp on cp.cart_id=cart.id left join product p on p.id=cp.product_id;
+select c.name, coalesce(sum(p.price), 0) as order_sum from customer c left join cart  on cart.customer_id=c.id left join cart_product cp on cp.cart_id=cart.id left join product p on p.id=cp.product_id group by c.name order by order_sum desc;
+select c.name, coalesce(sum(p.price), 0) as order_sum from customer c left join cart  on cart.customer_id=c.id left join cart_product cp on cp.cart_id=cart.id left join product p on p.id=cp.product_id group by c.name having sum(p.price)>0;
+select * from product limit 2; # limit 
+select * from product offset 1; # smeshenie na 1
+delete from cart where id= # delete stroke in table
+DROP DATABASE app; # del base  
 \conninfo
 \q # exit
+
