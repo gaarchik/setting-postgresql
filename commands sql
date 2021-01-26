@@ -1,1 +1,9 @@
-
+sudo apt-get update
+sudo apt install postgresql   # Установка постгре
+sudo -i -u postgres psql # Переход в командную строку postgesql
+CREATE USER test_user WITH password 'qwerty'; # CREATE USER
+CREATE DATABASE test_database OWNER test_user; # CREATE BASE
+GRANT ALL privileges ON DATABASE test_db TO test_user; # privileges test_user in base test_db
+DROP DATABASE test_db; # del base  
+\conninfo
+\q # exit
